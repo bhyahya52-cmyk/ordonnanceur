@@ -1,22 +1,16 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -I.
+all: clean ordonnanceur
 
-SRCS = main.c processus.c
-OBJS = $(SRCS:.c=.o)
-TARGET = ordonnanceur
-
-all: $(TARGET)
-
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+ordonnanceur: main.o processus.o
+	gcc -Wall -Wextra -std=c99 -o ordonnanceur main.o processus.o
 
 main.o: main.c processus.h scheduler.h
+	gcc -Wall -Wextra -std=c99 -I. -c main.c -o main.o
+
 processus.o: processus.c processus.h
+	gcc -Wall -Wextra -std=c99 -I. -c processus.c -o processus.o
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	del /F *.o ordonnanceur.exe 2>nul || rm -f *.o ordonnanceur
 
-run: $(TARGET)
-	./$(TARGET) config.txt
-
-.PHONY: all clean run
+run: ordonnanceur
+	./ordonnanceur config.txt
